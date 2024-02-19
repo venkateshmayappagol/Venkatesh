@@ -1,5 +1,5 @@
 # Use official OpenJDK image as the base image for building
-FROM maven:3.6.3-jdk-11 AS builder
+FROM maven:2.5.5-jdk-17 AS builder
 
 # Set the working directory in the container
 WORKDIR /app
@@ -17,16 +17,16 @@ COPY src ./src
 RUN mvn package
 
 # Use a lightweight base image for the application runtime
-FROM openjdk:11-jre-slim
+FROM openjdk:17-jre-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the packaged Spring Boot application from the builder stage into the container
-COPY --from=builder /app/target/your-application.jar .
+COPY --from=builder /app/target/loanservice .
 
 # Expose the port the application runs on
 EXPOSE 8080
 
 # Specify the command to run the application
-CMD ["java", "-jar", "your-application.jar"]
+CMD ["java", "-jar", "loanservice.jar"]
